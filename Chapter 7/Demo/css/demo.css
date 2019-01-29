@@ -6,4 +6,12 @@
   }
 
 #imageToFindFaces {
+ position:relative;
+    height: 100%;
+    width:100%;
 }
+video, canvas {
+  margin-left: 50px;
+  margin-top: 50px;
+  position: absolute;
+  }

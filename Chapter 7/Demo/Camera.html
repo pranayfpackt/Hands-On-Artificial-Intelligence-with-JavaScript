@@ -14,6 +14,7 @@
   <script src="../tracking/data/face-min.js"></script>
   <script src="../tracking/data/eye-min.js"></script>
   <script src="../tracking/data/mouth-min.js"></script>
+  <!--<script src="../tracking/assets/stats.min.js"></script>-->
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
@@ -37,45 +38,41 @@
                 </ul>
               </nav>
               <div class="container-fluid">
-        <div class="demo-image">
-                <img id="imageToFindFaces" src="../assets/face/5.jpeg" />
-              </div>
+        <div class="demo-camera">
+		<video id="video" width="480" height="320" preload autoplay loop muted></video>
+		<canvas id="canvas" width="480" height="320"></canvas>              </div>
     </div>
   <script>
   $(document).ready(function() {
    
-    FaceRecognition();
+    FaceTracker();
 });
 
   
  
- function FaceRecognition()
+ function FaceTracker()
  {
-    var img = document.getElementById('imageToFindFaces');
-
-    var tracker = new tracking.ObjectTracker(['face', 'eye', 'mouth']);
-    tracker.setStepSize(1.7);
-
-    tracking.track('#imageToFindFaces', tracker);
-
-    tracker.on('track', function(event) {
-        if (event.data.length === 0) {
-    
-  } else {
-      event.data.forEach(function(rectange) {
-        window.plot(rectange.x, rectange.y, rectange.width, rectange.height);
+    window.onload = function() {
+      var video = document.getElementById('video');
+      var canvas = document.getElementById('canvas');
+      var context = canvas.getContext('2d');
+      var tracker = new tracking.ObjectTracker('face');
+      tracker.setInitialScale(4);
+      tracker.setStepSize(2);
+      tracker.setEdgesDensity(0.1);
+      tracking.track('#video', tracker, { camera: true });
+      tracker.on('track', function(event) {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        event.data.forEach(function(rect) {
+          context.strokeStyle = '#ffffff';
+          context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+          context.font = '14px Helvetica';
+          context.fillStyle = "#fff";
+          context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
+          context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
+        });
       });
-  }
-    });
-
-    window.plot = function(x, y, w, h) {
-      var rectange = document.createElement('div');
-      document.querySelector('.demo-image').appendChild(rectange);
-      rectange.classList.add('rect');
-      rectange.style.width = w + 'px';
-      rectange.style.height = h + 'px';
-      rectange.style.left = (img.offsetLeft + x) + 'px';
-      rectange.style.top = (img.offsetTop + y) + 'px';
+      
     };
  }
 
