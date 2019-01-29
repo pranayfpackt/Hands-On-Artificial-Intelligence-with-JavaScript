@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Artificial Intelligence - Chapter 7</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--CSS-->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <link rel="stylesheet" href="../css/demo.css">
+  
+  <!--Tracking JS-->  
+  <script src="../tracking/tracking-min.js"></script>
+  <script src="../tracking/data/face-min.js"></script>
+  <script src="../tracking/data/eye-min.js"></script>
+  <script src="../tracking/data/mouth-min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <style>
+        
+        </style>
+</head>
+<body>
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+                <a class="navbar-brand" href="#"><img src="../assets/logo.png" height="20px"/></a>
+                
+                <!-- Links -->
+                <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                                  Face Recognition
+                                </a>
+                                <div class="dropdown-menu">
+                                  <a class="dropdown-item imagesample" href="" data-id="1">Image 1</a>
+                                  <a class="dropdown-item imagesample" href="" data-id="2">Image 2</a>
+                                  <a class="dropdown-item imagesample" href="" data-id="3">Image 3</a>
+                                  <a class="dropdown-item imagesample" href="" data-id="4">Image 4</a>
+                                  <a class="dropdown-item imagesample" href="" data-id="5">Image 5</a>
+                                  
+                                </div>
+                              </li>
+                 <!-- <li class="nav-item">
+                    <a class="nav-link" href="#">Link 2</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Link 3</a>
+                  </li>-->
+                </ul>
+              </nav>
+              <div class="container-fluid">
+        <!--<div id="image"><img class=imageProperties id="imageToFindFaces" src="" /></div>-->
+        <div class="demo-image">
+                <img id="imageToFindFaces" src="../assets/face/5.jpeg" />
+              </div>
+    </div>
+  <script>
+  $(document).ready(function() {
+    FaceRecognition();
+    
+    $(".imagesample").on( "click", function(e) {
+        e.preventDefault();
+        ImageChange($(this).data("id"));
+        $("div.rect").remove();
+        console.log($(this).data("id"));
+        
+        FaceRecognition();
+        return false;
+    });
+
+});
+  function ImageChange(Id)
+ {
+    $('#imageToFindFaces').attr("src","../assets/face/"+Id+".jpeg"); 
+ }
+ function FaceRecognition()
+ {
+    var img = document.getElementById('imageToFindFaces');
+
+    var tracker = new tracking.ObjectTracker(['face', 'eye', 'mouth']);
+    tracker.setStepSize(1.7);
+
+    tracking.track('#imageToFindFaces', tracker);
+
+    tracker.on('track', function(event) {
+        if (event.data.length === 0) {
+    
+  } else {
+      event.data.forEach(function(rectange) {
+        window.plot(rectange.x, rectange.y, rectange.width, rectange.height);
+      });
+  }
+    });
+
+    window.plot = function(x, y, w, h) {
+      var rectange = document.createElement('div');
+      document.querySelector('.demo-image').appendChild(rectange);
+      rectange.classList.add('rect');
+      rectange.style.width = w + 'px';
+      rectange.style.height = h + 'px';
+      rectange.style.left = (img.offsetLeft + x) + 'px';
+      rectange.style.top = (img.offsetTop + y) + 'px';
+    };
+ }
+
+    //calls the function named previewFile()
+  </script>
+</body>
+</html>
