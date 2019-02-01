@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Artificial Intelligence - Chapter 7</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--CSS-->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/demo.css">
+  
+  <!--Tracking JS-->  
+  <script src="../tracking/tracking-min.js"></script>
+  <script src="../tracking/data/face-min.js"></script>
+  <script src="../tracking/data/eye-min.js"></script>
+  <script src="../tracking/data/mouth-min.js"></script>
+  <!--jQuery & Bootstrap JS-->  
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+                <a class="navbar-brand" href="#"><img src="../assets/logo.png" height="20px"/></a>                
+                <!-- Links -->
+                <ul class="navbar-nav">                       
+                 <li class="nav-item">
+                    <a class="nav-link" href="/Index.html">Face Recognition (Photo)</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Camera.html">Face Tracking (Camera)</a>
+                  </li> <li class="nav-item">
+                    <a class="nav-link" href="/Video.html">Face Tracking (Video)</a>
+                  </li>
+                </ul>
+              </nav>
+              <div class="container-fluid">
+        <div class="demo-camera">
+		<video id="video" width="480" height="320" preload autoplay loop muted></video>
+		<canvas id="canvas" width="480" height="320"></canvas>              </div>
+    </div>
+  <script>
+  $(document).ready(function() {
+   
+    FaceTracker();
+});
+
+  
+ 
+ function FaceTracker()
+ {
+      var video = document.getElementById('video');
+      var canvas = document.getElementById('canvas');
+      var context = canvas.getContext('2d');
+      var tracker = new tracking.ObjectTracker('face');
+      tracker.setInitialScale(4);
+      tracker.setStepSize(2);
+      tracker.setEdgesDensity(0.1);
+      tracking.track('#video', tracker, { camera: true });
+      tracker.on('track', function(event) {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        event.data.forEach(function(rect) {
+          context.strokeStyle = '#ffffff';
+          context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+          context.font = '14px Helvetica';
+          context.fillStyle = "#fff";
+          context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
+          context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
+        });           
+    });
+ }
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+.rect {
+    border: 2px solid white;
+    left: -1000px;
+    position: absolute;
+    top: -1000px;
+  }
+video, canvas {
+  margin-left: 50px;
+  margin-top: 50px;
+  position: absolute;
+  }

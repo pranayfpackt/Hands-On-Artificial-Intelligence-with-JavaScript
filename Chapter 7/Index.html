@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Artificial Intelligence - Chapter 7</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--CSS-->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/demo.css">  
+  <!--Tracking JS-->  
+  <script src="../tracking/tracking-min.js"></script>
+  <script src="../tracking/data/face-min.js"></script>
+  <script src="../tracking/data/eye-min.js"></script>
+  <script src="../tracking/data/mouth-min.js"></script>
+  <!--jQuery & Bootstrap JS-->  
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+                <a class="navbar-brand" href="#"><img src="../assets/logo.png" height="20px"/></a>                
+                <!-- Links -->
+                <ul class="navbar-nav">                       
+                 <li class="nav-item">
+                    <a class="nav-link" href="/Index.html">Face Recognition (Photo)</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Camera.html">Face Tracking (Camera)</a>
+                  </li> <li class="nav-item">
+                    <a class="nav-link" href="/Video.html">Face Tracking (Video)</a>
+                  </li>
+                </ul>
+              </nav>
+              <div class="container-fluid">
+        <div class="demo-image">
+                <img id="imageToFindFaces" src="../assets/1.jpeg" />
+              </div>
+    </div>
+  <script>
+  $(document).ready(function() {   
+    FaceRecognition();
+});  
+ 
+ function FaceRecognition()
+ {
+    var img = document.getElementById('imageToFindFaces');
+
+    var tracker = new tracking.ObjectTracker(['face', 'eye', 'mouth']);
+    tracker.setStepSize(1.7);
+
+    tracking.track('#imageToFindFaces', tracker);
+
+    tracker.on('track', function(event) {
+        if (event.data.length === 0) {
+    
+  } else {
+      event.data.forEach(function(rectange) {
+        window.plot(rectange.x, rectange.y, rectange.width, rectange.height);
+      });
+  }
+    });
+
+    window.plot = function(x, y, w, h) {
+      var rectange = document.createElement('div');
+      document.querySelector('.demo-image').appendChild(rectange);
+      rectange.classList.add('rect');
+      rectange.style.width = w + 'px';
+      rectange.style.height = h + 'px';
+      rectange.style.left = (img.offsetLeft + x) + 'px';
+      rectange.style.top = (img.offsetTop + y) + 'px';
+    };
+ }
+
+  </script>
+</body>
+</html>
