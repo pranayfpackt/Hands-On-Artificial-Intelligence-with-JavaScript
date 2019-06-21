@@ -1,0 +1,14 @@
+{
+  "name": "chapter-13",
+  "version": "1.0.0",
+  "description": "Neural Networks Chapter of Hands-On Artificial Intelligence with JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Robert John",
+  "license": "ISC",
+  "dependencies": {
+    "@tensorflow/tfjs": "^1.1.2"
+  }
+}
